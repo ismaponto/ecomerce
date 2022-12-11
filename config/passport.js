@@ -37,8 +37,14 @@ module.exports = function(passport) {
                                     return done(err)
                                 }
                                 if (valid) {
-                                    console.log('User [' + req.body.username + '] has logged in.')
-                                    return done(null, { username: result.rows[0].username })
+                                    console.log('User [' + req.body.username + '] has logged in.');
+                                    console.log(result.rows[0]);
+
+                                    return done(null, {
+                                        username: result.rows[0].username,
+                                        id: result.rows[0].id,
+                                        total: 0
+                                    })
                                 } else {
                                     return done(null, false, req.flash('message', "Incorrect username or password"))
                                 }
@@ -84,7 +90,7 @@ module.exports = function(passport) {
                                         client.query('COMMIT')
                                         console.log('User [' + req.body.username + '] has registered.')
                                             //console.log(result)
-                                        return done(null, { username: req.body.username })
+                                        return done(null, { username: req.body.username, userId: req.body.userId })
                                     }
                                 });
                             }
@@ -134,7 +140,6 @@ module.exports = function(passport) {
                                             } else {
                                                 client.query('COMMIT')
                                                 console.log('User [' + req.user.username + '] has updated their password.')
-                                                    //console.log(result)
                                                 return done(null, { username: req.user.username }, req.flash('message', 'Your password has been updated.'))
                                             }
                                         });

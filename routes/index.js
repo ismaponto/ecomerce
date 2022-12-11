@@ -1,6 +1,9 @@
 const express = require('express')
 const router = express.Router()
 const passport = require('passport')
+const productsRouter = require('./products')
+const usersRouter = require('./users')
+const cartsRouter = require('./carts')
 
 router.get('/', (req, res) => {
     if (req.isAuthenticated()) {
@@ -19,6 +22,7 @@ router.get('/', (req, res) => {
 })
 
 router.get('/login', (req, res) => {
+    console.log(req.user);
     if (req.isAuthenticated()) {
         req.flash('message', 'Your are already logged in.')
         res.redirect('/profile')
@@ -35,9 +39,9 @@ router.post('/login', (req, res, next) => {
         req.flash('message', 'You are already logged in.')
         res.redirect('/profile')
     } else {
+        console.log(req)
         let user = req.body.username
         let pass = req.body.password;
-        console.log('acaisma' + user + 'hasta aca');
 
         if (user.length === 0 || pass.length === 0) {
             req.flash('message', 'You must provide a username and password.')
@@ -132,5 +136,10 @@ router.post('/updpass', (req, res, next) => {
     failureRedirect: '/profile',
     failureFlash: true
 }))
+
+
+// router.use('/products', productsRouter)
+// router.use('/user', usersRouter)
+// router.use('/carts', cartsRouter)
 
 module.exports = router;
